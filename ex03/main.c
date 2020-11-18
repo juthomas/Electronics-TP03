@@ -75,7 +75,17 @@ char uart_rx(void)
 
 //Interrupt on RX
 ISR(USART_RX_vect) {
-	uart_tx(uart_rx());;
+	char tmp;
+	tmp = uart_rx();
+	if (tmp >= 'A' && tmp <= 'Z')
+	{
+		tmp += 'a' - 'A';
+	}
+	else if (tmp >= 'a' && tmp <= 'z')
+	{
+		tmp -= 'a' - 'A';
+	}
+	uart_tx(tmp);
 }
 
 int main()
