@@ -13,19 +13,25 @@ MUTE		= FALSE
 
 all: hex flash
 
+help :
+	@echo "\0033[1;36mAvailable Options :"
+	@echo "	make [\0033[1;37mserial\0033[1;36m, \0033[1;37mcoffee\0033[1;36m,\
+	 \0033[1;37mflash\0033[1;36m, \0033[1;37mclean\0033[1;36m]\0033[1;37m"
+
 serial: coffee
+	@echo "\0033[1;36mStarting Serial Monitor"
 	@echo "To quit this windows"
 	@echo "Press CTRL+A"
 	@echo "Then type \":quit\""
-	@echo "Starting Screen in 5"
+	@echo "Starting Screen in 5\0033[1;37m"
 	@sleep 1
-	@echo "\033[1A\033[KStarting Screen in 4"
+	@echo "\033[1A\033[K\0033[1;36mStarting Screen in 4\0033[1;37m"
 	@sleep 1
-	@echo "\033[1A\033[KStarting Screen in 3"
+	@echo "\033[1A\033[K\0033[1;36mStarting Screen in 3\0033[1;37m"
 	@sleep 1
-	@echo "\033[1A\033[KStarting Screen in 2"
+	@echo "\033[1A\033[K\0033[1;36mStarting Screen in 2\0033[1;37m"
 	@sleep 1
-	@echo "\033[1A\033[KStarting Screen in 1"
+	@echo "\033[1A\033[K\0033[1;36mStarting Screen in 1\0033[1;37m"
 	@sleep 1
 	@screen $(PORT) $(BAUD)
 
