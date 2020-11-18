@@ -42,8 +42,8 @@ void uart_init(uint32_t baud, uint8_t config)
 	//Setting frame format config 
 	UCSR0C = config;
 
-	//Enable Transmition (RXEN0 for reception)
-	UCSR0B = (1 << TXEN0);
+	//Enable Transmition and reception
+	UCSR0B = (1 << TXEN0) | (1 << RXEN0);
 
 }
 
@@ -68,21 +68,20 @@ ISR(TIMER1_COMPA_vect)
 	uart_printstr("Hello World!\r\n");
 }
 
+char uart_rx(void)
+{
+	/* Wait for data to be received */
+	while ( !(UCSR0A & (1<<RXC0)) );
+	/* Get and return received data from buffer */
+	return UDR0;
+}
 
 int main()
 {
 	uart_init(115200, SERIAL_8N1);
 
-	//Timer on 16Mhz/1024*2sec // A REVOIR parait comme 1.5sec
-	// OCR1A = 62500;
-	OCR1A = F_CPU / 1024 * 2;
-	//Mode 4 (Table 16-4) et Prescaller sur 1024 (Table 16-5)
-	TCCR1B = (1 << WGM12) | (1 << CS12) | (1 << CS10);
-	//Toggle On compare match (Table 16-1)
-	TCCR1A = 1 << COM1A0;
-	//Timer/Counter1, Output Compare B Match Interrupt Enable (16.11.8)
-	TIMSK1|=OCIE1B; 
-	//Enable interrupts
-	SREG|=(1<<7);
-	for(;;);
+	for(;;)
+	{
+		uart_tx(uart_rx());
+	}
 }
