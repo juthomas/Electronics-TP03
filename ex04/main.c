@@ -43,7 +43,7 @@ void uart_init(uint32_t baud, uint8_t config)
 	//UCSR0C = config;
 	UCSR0C |= (1<<UCSZ00 | (1 << UCSZ01));
 	//Enable Transmition and Reception and Interruption on Reception
-	UCSR0B = (1 << TXEN0) | (1 << RXEN0) | (1 << RXCIE0);
+	UCSR0B = (1 << TXEN0) | (1 << RXEN0);// | (1 << RXCIE0);
 
 }
 
@@ -72,17 +72,76 @@ char uart_rx(void)
 	return UDR0;
 }
 
+const char *username = "juthomas";
+const char *password = "juju";
 
-//Interrupt on RX
-ISR(USART_RX_vect) {
-	uart_tx(uart_rx());;
+int str_comp(char *s1, char *s2)
+{
+	while (*s1 == *s2 && *s1 && *s2)
+	{
+		s1++;
+		s2++;
+	}
+	return (*s1 - *s2);
+}
+
+
+char *get_string_uart(int print_char)
+{
+	//uart_tx(uart_rx());
+	char c = '\0';
+	char str[50];
+	int i = 0;
+	while (c != '\n')
+	{
+		c = uart_rx();
+
+		if (c == 127)
+		{
+			if (i > 0)
+			{				
+				uart_printstr("\033[1D\033[K");
+			}
+			i--;
+		}
+		else if (c == 13)
+		{
+			break;
+			// uart_printstr("ret\r\n");
+		}
+		else if (c > 33 && c < 126)
+		{
+			if (print_char == 1)
+			{
+				uart_tx(c);
+			}
+			else
+			{
+				uart_tx('*');
+			}
+			
+			
+			str[i] = c;
+			i++;
+		}
+	}
+	str[i] = '\0';
+	uart_printstr("\r\n");
+	uart_printstr(str);
+	uart_printstr("\r\n");
+	return (str);
 }
 
 int main()
 {
 	uart_init(115200, SERIAL_8N1);
-	
 	//Enable interrupts
-	SREG|=(1<<7);
-	for(;;);
+	// SREG|=(1<<7);
+	for(;;)
+	{
+		uart_printstr("Bonjour ! Entrez votre login : \r\n");
+		uart_printstr("username: ");
+		get_string_uart(0);
+
+	}
 }

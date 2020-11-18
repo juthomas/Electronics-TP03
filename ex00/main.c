@@ -34,7 +34,6 @@ void uart_init(uint32_t baud, uint8_t config)
 	UBRR0H = baud_setting >> 8;
 	UBRR0L = baud_setting;
 
-
 	//Setting frame format config 
 	UCSR0C = config;
 
