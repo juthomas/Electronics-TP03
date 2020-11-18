@@ -81,10 +81,6 @@ int main()
 	uart_init(115200, SERIAL_8N1);
 	
 	//DDRC |= (1 << PC5);
-	sei();
-
-	for(;;)
-	{
-		
-	}
+	SREG|=(1<<7);
+	for(;;);
 }
