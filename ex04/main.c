@@ -26,22 +26,6 @@ const t_login g_logs[LOG_NUMBER] = {
 };
 
 
-void	wait_x_cpu_clocks(int32_t cpu_clocks)
-{
-	while (cpu_clocks > 0)
-	{
-		cpu_clocks-=3;
-	}
-}
-
-void	custom_delay(int32_t milli)
-{
-	//milli = 0,001s
-	milli = milli *	2000;
-	wait_x_cpu_clocks(milli - 5);
-}
-
-
 void uart_init(uint32_t baud, uint8_t config)
 {
 	//(20.5)
@@ -143,8 +127,7 @@ void get_string_uart(int print_char, char str[50])
 int main()
 {
 	uart_init(115200, SERIAL_8N1);
-	//Enable interrupts
-	// SREG|=(1<<7);
+
 	char tmp_username[50];
 	char tmp_password[50];
 	for(;;)
