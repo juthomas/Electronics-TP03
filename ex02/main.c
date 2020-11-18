@@ -65,6 +65,7 @@ void uart_printstr(const char* str)
 
 char uart_rx(void)
 {
+	//(20.7)
 	/* Wait for data to be received */
 	while ( !(UCSR0A & (1<<RXC0)) );
 	/* Get and return received data from buffer */
