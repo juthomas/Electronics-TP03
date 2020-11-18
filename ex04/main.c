@@ -11,6 +11,18 @@
     void vector (void) __attribute__ ((signal,__INTR_ATTRS)) __VA_ARGS__; \
     void vector (void)
 
+typedef struct	s_login
+{
+	const char *username;
+	const char *password;
+}				t_login;
+#define LOG_NUMBER 2
+
+const t_login g_logs[LOG_NUMBER] = {
+	(t_login){.username = "juthomas", .password = "juju"},
+	(t_login){.username = "jgourdin", .password = "jojo"}
+};
+
 
 void	wait_x_cpu_clocks(int32_t cpu_clocks)
 {
@@ -141,21 +153,26 @@ int main()
 		uart_printstr("password: ");
 		get_string_uart(0, tmp_password);
 		uart_printstr("\r\n");
+		int current_log = 0;
+		int success = 0;
+		while (current_log < LOG_NUMBER)
+		{
+			if ((str_comp(tmp_username, g_logs[current_log].username) == 0)
+				&& (str_comp(tmp_password, g_logs[current_log].password) == 0))
+			{
+				success = 1;
+			}
+			current_log++;
+		}
 
-
-		if ((str_comp(tmp_username, username) == 0)
-		&& (str_comp(tmp_password, password) == 0))
+		if (success == 1)
 		{
 			uart_printstr("CC BG\r\n");
-
 		}
 		else
 		{
 			uart_printstr("Casse toi en fait\r\n");
 		}
-		
-
 		uart_printstr("\r\n");
-
 	}
 }
