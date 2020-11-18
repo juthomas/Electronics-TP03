@@ -72,8 +72,8 @@ char uart_rx(void)
 	return UDR0;
 }
 
-const char *username = "juthomas";
-const char *password = "juju";
+char username[50] = "juthomas";
+char password[50] = "juju";
 
 int str_comp(char *s1, char *s2)
 {
@@ -86,11 +86,9 @@ int str_comp(char *s1, char *s2)
 }
 
 
-char *get_string_uart(int print_char)
+void get_string_uart(int print_char, char str[50])
 {
-	//uart_tx(uart_rx());
 	char c = '\0';
-	char str[50];
 	int i = 0;
 	while (c != '\n')
 	{
@@ -99,17 +97,17 @@ char *get_string_uart(int print_char)
 		if (c == 127)
 		{
 			if (i > 0)
-			{				
+			{
 				uart_printstr("\033[1D\033[K");
+				i--;
 			}
-			i--;
 		}
 		else if (c == 13)
 		{
+			uart_printstr("\r\n");
 			break;
-			// uart_printstr("ret\r\n");
 		}
-		else if (c > 33 && c < 126)
+		else if ((c >= 32  && c < 126))
 		{
 			if (print_char == 1)
 			{
@@ -126,10 +124,6 @@ char *get_string_uart(int print_char)
 		}
 	}
 	str[i] = '\0';
-	uart_printstr("\r\n");
-	uart_printstr(str);
-	uart_printstr("\r\n");
-	return (str);
 }
 
 int main()
@@ -137,11 +131,31 @@ int main()
 	uart_init(115200, SERIAL_8N1);
 	//Enable interrupts
 	// SREG|=(1<<7);
+	char tmp_username[50];
+	char tmp_password[50];
 	for(;;)
 	{
 		uart_printstr("Bonjour ! Entrez votre login : \r\n");
 		uart_printstr("username: ");
-		get_string_uart(0);
+		get_string_uart(1, tmp_username);
+		uart_printstr("password: ");
+		get_string_uart(0, tmp_password);
+		uart_printstr("\r\n");
+
+
+		if ((str_comp(tmp_username, username) == 0)
+		&& (str_comp(tmp_password, password) == 0))
+		{
+			uart_printstr("CC BG\r\n");
+
+		}
+		else
+		{
+			uart_printstr("Casse toi en fait\r\n");
+		}
+		
+
+		uart_printstr("\r\n");
 
 	}
 }

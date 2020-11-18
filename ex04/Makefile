@@ -35,6 +35,9 @@ serial: coffee
 	@sleep 1
 	@screen $(PORT) $(BAUD)
 
+monitor: coffee
+	@screen $(PORT) $(BAUD)
+
 coffee: hex flash clean
 	@echo ""
 	@echo "                    {"
