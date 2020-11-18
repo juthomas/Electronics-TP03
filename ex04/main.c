@@ -15,12 +15,14 @@ typedef struct	s_login
 {
 	const char *username;
 	const char *password;
+	const char *particules;
 }				t_login;
+
 #define LOG_NUMBER 2
 
 const t_login g_logs[LOG_NUMBER] = {
-	(t_login){.username = "juthomas", .password = "juju"},
-	(t_login){.username = "jgourdin", .password = "jojo"}
+	(t_login){.username = "juthomas", .password = "juju", .particules = "le grand"},
+	(t_login){.username = "jgourdin", .password = "jojo", .particules = "le magnifique"}
 };
 
 
@@ -52,8 +54,8 @@ void uart_init(uint32_t baud, uint8_t config)
 	UBRR0L = baud_setting;
 
 	//Setting frame format config 
-	//UCSR0C = config;
-	UCSR0C |= (1<<UCSZ00 | (1 << UCSZ01));
+	UCSR0C = config;
+	// UCSR0C |= (1<<UCSZ00 | (1 << UCSZ01));
 	//Enable Transmition and Reception and Interruption on Reception
 	UCSR0B = (1 << TXEN0) | (1 << RXEN0);// | (1 << RXCIE0);
 
@@ -160,18 +162,22 @@ int main()
 			if ((str_comp(tmp_username, g_logs[current_log].username) == 0)
 				&& (str_comp(tmp_password, g_logs[current_log].password) == 0))
 			{
-				success = 1;
+				success = current_log + 1;
 			}
 			current_log++;
 		}
 
-		if (success == 1)
+		if (success >= 1)
 		{
-			uart_printstr("CC BG\r\n");
+			uart_printstr("CC chef ");
+			uart_printstr(g_logs[success-1].username);
+			uart_printstr(" ");
+			uart_printstr(g_logs[success-1].particules);
+			uart_printstr("\r\n");
 		}
 		else
 		{
-			uart_printstr("Casse toi en fait\r\n");
+			uart_printstr("Ptdr t ki?\r\n");
 		}
 		uart_printstr("\r\n");
 	}
