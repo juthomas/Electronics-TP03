@@ -149,12 +149,12 @@ int main()
 	char tmp_password[50];
 	for(;;)
 	{
-		uart_printstr("Bonjour ! Entrez votre login : \r\n");
-		uart_printstr("username: ");
+		uart_printstr("\033[1;36mBonjour ! Entrez votre login : \r\n");
+		uart_printstr("\033[1;34musername: \033[1;35m");
 		get_string_uart(1, tmp_username);
-		uart_printstr("password: ");
+		uart_printstr("\033[1;34mpassword: \033[1;35m");
 		get_string_uart(0, tmp_password);
-		uart_printstr("\r\n");
+		uart_printstr("\033[1;36m\r\n");
 		int current_log = 0;
 		int success = 0;
 		while (current_log < LOG_NUMBER)
@@ -169,15 +169,15 @@ int main()
 
 		if (success >= 1)
 		{
-			uart_printstr("CC chef ");
+			uart_printstr("\033[1;32mCC chef ");
 			uart_printstr(g_logs[success-1].username);
 			uart_printstr(" ");
 			uart_printstr(g_logs[success-1].particules);
-			uart_printstr("\r\n");
+			uart_printstr("\033[1;36m\r\n");
 		}
 		else
 		{
-			uart_printstr("Ptdr t ki?\r\n");
+			uart_printstr("\033[1;31mPtdr t ki?\033[1;37m\r\n");
 		}
 		uart_printstr("\r\n");
 	}
