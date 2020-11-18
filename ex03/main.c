@@ -72,8 +72,10 @@ char uart_rx(void)
 	return UDR0;
 }
 
+
+//Interrupt on RX
 ISR(USART_RX_vect) {
-    uart_tx(uart_rx());;
+	uart_tx(uart_rx());;
 }
 
 int main()
