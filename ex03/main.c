@@ -40,10 +40,10 @@ void uart_init(uint32_t baud, uint8_t config)
 	UBRR0L = baud_setting;
 
 	//Setting frame format config 
-	UCSR0C = config;
-
+	//UCSR0C = config;
+	UCSR0C |= (1<<UCSZ00 | (1 << UCSZ01));
 	//Enable Transmition and reception
-	UCSR0B = (1 << TXEN0) | (1 << RXEN0);
+	UCSR0B = (1 << TXEN0) | (1 << RXEN0) | (1 << RXCIE0);
 
 }
 
@@ -72,12 +72,19 @@ char uart_rx(void)
 	return UDR0;
 }
 
+ISR(USART_RX_vect) {
+    uart_tx(uart_rx());;
+}
+
 int main()
 {
 	uart_init(115200, SERIAL_8N1);
+	
+	//DDRC |= (1 << PC5);
+	sei();
 
 	for(;;)
 	{
-		uart_tx(uart_rx());
+		
 	}
 }
