@@ -7,6 +7,8 @@
 #define CPU_CLOCK 2000000 // 16Mhz -> / 8 2Mhz
 #define SERIAL_8N1 0x06
 
+//screen /dev/<console_port> 115200
+
 void	wait_x_cpu_clocks(int32_t cpu_clocks)
 {
 	while (cpu_clocks > 0)
@@ -44,7 +46,9 @@ void uart_init(uint32_t baud, uint8_t config)
 
 void uart_tx(char c)
 {
-
+	//Wait for empty buffer
+	while (!( UCSR0A & (1<<UDRE0)));
+	UDR0 = c;
 }
 
 int main()

@@ -1,6 +1,6 @@
 FILENAME	= main
 # PORT		= /dev/ttyUSB1
-PORT		= /dev/tty.usbserial-0001
+PORT		= /dev/ttyUSB0
 # PORT		= /dev/cu.SLAB_USBtoUART
 DEVICE		= atmega328p
 PROGRAMMER	= arduino
@@ -9,9 +9,25 @@ F_CPU		= 16000000 #16 Mhz quartz #2 Mhz Cpu Clock (Quartz / 8)
 COMPILE		= avr-gcc -Wall -mmcu=$(DEVICE) -DF_CPU=${F_CPU}
 COLOR		= \0033[1;35m
 
-MUTE		= TRUE
+MUTE		= FALSE
 
 all: hex flash
+
+serial: coffee
+	@echo "To quit this windows"
+	@echo "Press CTRL+A"
+	@echo "Then type \":quit\""
+	@echo "Starting Screen in 5"
+	@sleep 1
+	@echo "\033[1A\033[KStarting Screen in 4"
+	@sleep 1
+	@echo "\033[1A\033[KStarting Screen in 3"
+	@sleep 1
+	@echo "\033[1A\033[KStarting Screen in 2"
+	@sleep 1
+	@echo "\033[1A\033[KStarting Screen in 1"
+	@sleep 1
+	@screen $(PORT) $(BAUD)
 
 coffee: hex flash clean
 	@echo ""
