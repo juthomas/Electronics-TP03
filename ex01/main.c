@@ -7,6 +7,11 @@
 #define CPU_CLOCK 2000000 // 16Mhz -> / 8 2Mhz
 #define SERIAL_8N1 0x06
 
+#define ISR(vector, ...)            \
+    void vector (void) __attribute__ ((signal,__INTR_ATTRS)) __VA_ARGS__; \
+    void vector (void)
+
+
 void	wait_x_cpu_clocks(int32_t cpu_clocks)
 {
 	while (cpu_clocks > 0)
@@ -51,14 +56,38 @@ void uart_tx(char c)
 	UDR0 = c;
 }
 
+void uart_printstr(const char* str)
+{
+	while (*str)
+	{
+		uart_tx(*str++);
+	}
+}
+
+ISR(TIMER1_COMPA_vect)
+{
+	uart_printstr("Hello World!\r\n");
+}
+
+
 int main()
 {
 	uart_init(115200, SERIAL_8N1);
 
-	//Loop
+	//Timer on 16Mhz/1024*2sec // A REVOIR parait comme 1.5sec
+	// OCR1A = 62500;
+	OCR1A = F_CPU / 1024 * 2;
+	//Mode 4 (Table 16-4) et Prescaller sur 1024 (Table 16-5)
+	TCCR1B = (1 << WGM12) | (1 << CS12) | (1 << CS10);
+	//Toggle On compare match (Table 16-1)
+	TCCR1A = 1 << COM1A0;
+	//Timer/Counter1, Output Compare B Match Interrupt Enable (16.11.8)
+	TIMSK1|=OCIE1B; 
+	//Enable interrupts
+	SREG|=(1<<7);
 	for(;;)
 	{
-		uart_tx('Z');
-		custom_delay(1000);
+		// uart_tx('Z');
+		// custom_delay(1000);
 	}
 }
