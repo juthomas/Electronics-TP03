@@ -63,11 +63,6 @@ void uart_printstr(const char* str)
 	}
 }
 
-ISR(TIMER1_COMPA_vect)
-{
-	uart_printstr("Hello World!\r\n");
-}
-
 char uart_rx(void)
 {
 	/* Wait for data to be received */
