@@ -93,6 +93,6 @@ int main()
 	uart_init(115200, SERIAL_8N1);
 	
 	//Enable interrupts
-	SREG|=(1<<7);
+	SREG |= (1 << SREG_I);
 	for(;;);
 }

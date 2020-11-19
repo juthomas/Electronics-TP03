@@ -75,14 +75,14 @@ int main()
 
 	//Timer on 16Mhz/1024*2sec // A REVOIR parait comme 1.5sec
 	// OCR1A = 62500;
-	OCR1A = F_CPU / 1024 * 2;
+	OCR1A = F_CPU / 1024 * 2 - 1;
 	//Mode 4 (Table 16-4) et Prescaller sur 1024 (Table 16-5)
 	TCCR1B = (1 << WGM12) | (1 << CS12) | (1 << CS10);
 	//Toggle On compare match (Table 16-1)
 	TCCR1A = 1 << COM1A0;
 	//Timer/Counter1, Output Compare B Match Interrupt Enable (16.11.8)
-	TIMSK1|=OCIE1B; 
+	TIMSK1 |= OCIE1B; 
 	//Enable interrupts
-	SREG|=(1<<7);
+	SREG |= (1 << SREG_I);
 	for(;;);
 }

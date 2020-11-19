@@ -19,11 +19,12 @@ typedef struct	s_login
 	const char *particules;
 }				t_login;
 
-#define LOG_NUMBER 2
+#define LOG_NUMBER 3
 
-const t_login g_logs[LOG_NUMBER] = {
+static const t_login g_logs[LOG_NUMBER] = {
 	(t_login){.username = "juthomas", .password = "juju", .particules = "le grand"},
-	(t_login){.username = "jgourdin", .password = "jojo", .particules = "le magnifique"}
+	(t_login){.username = "jgourdin", .password = "jojo", .particules = "le magnifique"},
+	(t_login){.username = "Party-Boi", .password = "jojo", .particules = "la star de reddit"}
 };
 
 void	wait_x_cpu_clocks(int32_t cpu_clocks)
@@ -153,8 +154,6 @@ void get_string_uart(int print_char, char str[50])
 			{
 				uart_tx('*');
 			}
-			
-			
 			str[i] = c;
 			i++;
 		}

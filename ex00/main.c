@@ -26,7 +26,7 @@ void	custom_delay(int32_t milli)
 void uart_init(uint32_t baud, uint8_t config)
 {
 	//(20.5)
-	uint16_t baud_setting = (F_CPU / 4 / baud - 1) / 2;
+	uint16_t baud_setting = (F_CPU / 8 / baud - 1);
 
 	UCSR0A = 1 << U2X0;
 
@@ -39,7 +39,6 @@ void uart_init(uint32_t baud, uint8_t config)
 
 	//Enable Transmition (RXEN0 for reception)
 	UCSR0B = (1 << TXEN0);
-
 }
 
 void uart_tx(char c)
