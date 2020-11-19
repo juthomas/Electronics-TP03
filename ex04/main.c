@@ -6,6 +6,7 @@
 #include <avr/io.h>
 #define CPU_CLOCK 2000000 // 16Mhz -> / 8 2Mhz
 #define SERIAL_8N1 0x06
+#define NULL 0
 
 #define ISR(vector, ...)            \
     void vector (void) __attribute__ ((signal,__INTR_ATTRS)) __VA_ARGS__; \
@@ -24,6 +25,46 @@ const t_login g_logs[LOG_NUMBER] = {
 	(t_login){.username = "juthomas", .password = "juju", .particules = "le grand"},
 	(t_login){.username = "jgourdin", .password = "jojo", .particules = "le magnifique"}
 };
+
+void	wait_x_cpu_clocks(int32_t cpu_clocks)
+{
+	while (cpu_clocks > 0)
+	{
+		cpu_clocks-=3;
+	}
+}
+
+void	custom_delay(uint32_t milli)
+{
+	//milli = 0,001s
+	milli = milli *	2000;
+	wait_x_cpu_clocks(milli - 5);
+}
+
+void blink_led(int normaly_on)
+{
+	DDRB |= (1 << PIND0);
+	DDRB |= (1 << PIND1);
+	PORTB = normaly_on;
+
+	for (int i = 0; i < 10; i++)
+	{
+		PORTB ^= (1 << PIND0);
+		PORTB ^= (1 << PIND1);
+		custom_delay(100);
+	}
+	PORTB = 0b00000000;
+}
+
+void blink_success()
+{
+	blink_led(1 << PIND1);
+}
+
+void blink_failure()
+{
+	blink_led(NULL);
+}
 
 
 void uart_init(uint32_t baud, uint8_t config)
@@ -154,10 +195,12 @@ int main()
 			uart_printstr(" ");
 			uart_printstr(g_logs[success-1].particules);
 			uart_printstr("\033[1;36m\r\n");
+			blink_success();
 		}
 		else
 		{
 			uart_printstr("\033[1;31mPtdr t ki?\033[1;37m\r\n");
+			blink_failure();
 		}
 		uart_printstr("\r\n");
 	}
