@@ -15,8 +15,17 @@ all: hex flash
 
 help :
 	@echo "\0033[1;36mAvailable Options :"
-	@echo "	make [\0033[1;37mserial\0033[1;36m, \0033[1;37mcoffee\0033[1;36m,\
-	 \0033[1;37mflash\0033[1;36m, \0033[1;37mclean\0033[1;36m]\0033[1;37m"
+	@echo "	make [\0033[1;37mcoffee\0033[1;36m, \
+	\0033[1;37mclean\0033[1;36m, \0033[1;37mflash\0033[1;36m, \
+	\0033[1;37mhex\0033[1;36m, \0033[1;37mserial\0033[1;36m, \
+	\0033[1;37mmonitor\0033[1;36m]\0033[1;37m"
+	@echo ""
+	@echo "	\0033[1;37mcoffee\0033[1;32m : make all then clean objects files"
+	@echo "	\0033[1;37mclean\0033[1;32m : clean .bin .hex. and .o files"
+	@echo "	\0033[1;37mflash\0033[1;32m : flash .hex files on board"
+	@echo "	\0033[1;37mhex\0033[1;32m : create .hex (plus .bin and .o) files"
+	@echo "	\0033[1;37mserial\0033[1;32m : make coffee then launch screen with warning message"
+	@echo "	\0033[1;37mmonitor\0033[1;32m : make coffee then launch directly screen"
 
 serial: coffee
 	@echo "\0033[1;36mStarting Serial Monitor"
