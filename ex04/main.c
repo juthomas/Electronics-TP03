@@ -70,9 +70,6 @@ char uart_rx(void)
 	return UDR0;
 }
 
-char username[50] = "juthomas";
-char password[50] = "juju";
-
 int str_comp(char *s1, char *s2)
 {
 	while (*s1 == *s2 && *s1 && *s2)
